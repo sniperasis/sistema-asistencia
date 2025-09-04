@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: sistema-asistencia
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build:web
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+    healthCheckPath: /

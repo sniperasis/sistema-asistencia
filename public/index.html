@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Asistencia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .upload-area:hover {
+            border-color: #667eea;
+            background-color: #f8f9ff;
+        }
+        
+        .upload-area.dragover {
+            border-color: #667eea;
+            background-color: #f0f2ff;
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            color: #ddd;
+            margin-bottom: 15px;
+        }
+        
+        .upload-text {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .upload-hint {
+            color: #999;
+            font-size: 14px;
+        }
+        
+        input[type="file"] {
+            display: none;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+        
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .links {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .link {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            background: #f8f9fa;
+            color: #333;
+            text-decoration: none;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .link:hover {
+            background: #e9ecef;
+            transform: translateY(-1px);
+        }
+        
+        .progress {
+            width: 100%;
+            height: 6px;
+            background-color: #f0f0f0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .upload-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .tab-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            background: #f8f9fa;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .tab-btn:hover:not(.active) {
+            background: #e9ecef;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .email-section {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .email-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .email-section h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .email-section p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .email-address {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 2px solid #667eea;
+        }
+        
+        .email-address strong {
+            color: #667eea;
+            font-size: 18px;
+        }
+        
+        .btn-copy {
+            background: #28a745;
+            padding: 8px 15px;
+            font-size: 14px;
+        }
+        
+        .email-instructions {
+            text-align: left;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .email-instructions h4 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .email-instructions ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .email-instructions li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            color: #666;
+        }
+        
+        .email-instructions li:last-child {
+            border-bottom: none;
+        }
+        
+        .email-instructions li:before {
+            content: "✓ ";
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .email-status {
+            margin-top: 30px;
+            text-align: left;
+        }
+        
+        .email-status h4 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .emails-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background: white;
+        }
+        
+        .email-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            transition: background 0.3s ease;
+        }
+        
+        .email-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .email-item:last-child {
+            border-bottom: none;
+        }
+        
+        .email-info {
+            flex: 1;
+        }
+        
+        .email-sender {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .email-details {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .email-status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        
+        .status-processed {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .loading-email {
+            padding: 20px;
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">📋</div>
+        <h1>Sistema de Asistencia</h1>
+        <p class="subtitle">Sube tu archivo Excel para comenzar</p>
+        
+        <!-- Botón para lanzar App Móvil -->
+        <div style="margin: 20px 0;">
+            <a href="/app-movil-funcional" target="_blank" style="
+                display: inline-block;
+                background: linear-gradient(135deg, #28a745, #20c997);
+                color: white;
+                padding: 15px 30px;
+                border-radius: 25px;
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 16px;
+                box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+                transition: all 0.3s ease;
+                border: none;
+                cursor: pointer;
+            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(40, 167, 69, 0.4)'" 
+               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 15px rgba(40, 167, 69, 0.3)'">
+                📱 Iniciar App Móvil - Marcar Asistencia
+            </a>
+        </div>
+        
+        <div class="upload-tabs">
+            <button class="tab-btn active" data-tab="file">📁 Explorador de Archivos</button>
+            <button class="tab-btn" data-tab="email">📧 Envío por Correo</button>
+        </div>
+        
+        <div class="tab-content active" id="file-tab">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📊</div>
+                <div class="upload-text">Haz clic para seleccionar archivo Excel</div>
+                <div class="upload-hint">Solo se permite selección desde explorador de archivos</div>
+            </div>
+            <input type="file" id="fileInput" accept=".xlsx,.xls">
+        </div>
+        
+        <div class="tab-content" id="email-tab">
+            <div class="email-section">
+                <div class="email-icon">📧</div>
+                <h3>Enviar Archivo por Correo</h3>
+                <p>Envía tu archivo Excel al siguiente correo:</p>
+                <div class="email-address">
+                    <strong>asistencia@tudominio.com</strong>
+                    <button class="btn btn-copy" onclick="copyEmail()">📋 Copiar</button>
+                </div>
+                <div class="email-instructions">
+                    <h4>📋 Instrucciones:</h4>
+                    <ul>
+                        <li>Adjunta tu archivo Excel al correo</li>
+                        <li>Asunto: "Archivo de Asistencia"</li>
+                        <li>El archivo se procesará automáticamente</li>
+                        <li>Recibirás confirmación por correo</li>
+                    </ul>
+                </div>
+                <div class="email-status" id="emailStatus">
+                    <h4>📊 Estado de Correos Recibidos:</h4>
+                    <div class="emails-list" id="emailsList">
+                        <div class="loading-email">Cargando correos...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="progress" id="progressContainer" style="display: none;">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <div id="status"></div>
+        
+        <div class="links">
+            <a href="/web" class="link">📊 Panel de Control</a>
+            <a href="/app-movil-funcional" class="link" target="_blank">📱 App Móvil - Marcar Asistencia</a>
+            <a href="/api/reporte-asistencias" class="link" target="_blank">📈 Ver Reporte</a>
+            <button class="link" onclick="limpiarAsistencia()" style="cursor: pointer; border: none;">🗑️ Limpiar Asistencia</button>
+        </div>
+    </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const status = document.getElementById('status');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        
+        // Variables para Google Drive
+        let isDriveAuthenticated = false;
+
+        // Event listeners para tabs
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+        });
+        
+        // Event listeners para explorador de archivos (solo click, no drag & drop)
+        uploadArea.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', handleFileSelect);
+        
+        // Cargar correos al cambiar a pestaña de email
+        document.querySelector('[data-tab="email"]').addEventListener('click', loadEmails);
+
+        // Funciones eliminadas: drag & drop no permitido
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                uploadFile(file);
+            }
+        }
+
+        function uploadFile(file) {
+            // Validar tipo de archivo
+            const validTypes = [
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'application/vnd.ms-excel'
+            ];
+            
+            if (!validTypes.includes(file.type)) {
+                showStatus('Por favor selecciona un archivo Excel válido (.xlsx o .xls)', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('excel', file);
+
+            progressContainer.style.display = 'block';
+            progressBar.style.width = '0%';
+
+            fetch('/api/upload-excel', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                progressBar.style.width = '100%';
+                setTimeout(() => {
+                    progressContainer.style.display = 'none';
+                    if (data.error) {
+                        showStatus(data.error, 'error');
+                    } else {
+                        showStatus(`✅ ${data.message}. Se procesaron ${data.empleados} empleados.`, 'success');
+                    }
+                }, 500);
+            })
+            .catch(error => {
+                progressContainer.style.display = 'none';
+                showStatus('Error al subir el archivo: ' + error.message, 'error');
+            });
+        }
+
+        function showStatus(message, type) {
+            status.innerHTML = `<div class="status ${type}">${message}</div>`;
+            setTimeout(() => {
+                status.innerHTML = '';
+            }, 5000);
+        }
+        
+        // Funciones para tabs
+        function switchTab(tabName) {
+            // Actualizar botones
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            
+            // Actualizar contenido
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            
+            // Si es la pestaña de email, cargar correos
+            if (tabName === 'email') {
+                loadEmails();
+            }
+        }
+        
+        // Funciones para correo electrónico
+        function copyEmail() {
+            const email = 'asistencia@tudominio.com';
+            navigator.clipboard.writeText(email).then(() => {
+                showStatus('✅ Correo copiado al portapapeles', 'success');
+            }).catch(() => {
+                showStatus('❌ Error al copiar correo', 'error');
+            });
+        }
+        
+        async function loadEmails() {
+            try {
+                const response = await fetch('/api/emails');
+                const emails = await response.json();
+                
+                const emailsList = document.getElementById('emailsList');
+                emailsList.innerHTML = '';
+                
+                if (emails.length === 0) {
+                    emailsList.innerHTML = '<div class="loading-email">No hay correos recibidos</div>';
+                    return;
+                }
+                
+                emails.forEach(email => {
+                    const emailItem = document.createElement('div');
+                    emailItem.className = 'email-item';
+                    emailItem.innerHTML = `
+                        <div class="email-info">
+                            <div class="email-sender">${email.sender}</div>
+                            <div class="email-details">
+                                ${email.subject} | ${new Date(email.receivedAt).toLocaleString()}
+                            </div>
+                        </div>
+                        <div class="email-status-badge status-${email.status}">
+                            ${email.status}
+                        </div>
+                    `;
+                    emailsList.appendChild(emailItem);
+                });
+            } catch (error) {
+                document.getElementById('emailsList').innerHTML = 
+                    '<div class="loading-email">Error al cargar correos</div>';
+            }
+        }
+        
+        // Función para limpiar asistencia
+        async function limpiarAsistencia() {
+            if (!confirm('⚠️ ADVERTENCIA: LIMPIEZA COMPLETA DEL SISTEMA\n\n¿Estás seguro de que quieres limpiar completamente el sistema?\n\nEsta acción eliminará:\n• TODOS los empleados cargados\n• TODOS los registros de asistencia\n• TODA la información del sistema\n\nEsta acción NO se puede deshacer.\n\n¿Continuar?')) {
+                return;
+            }
+            
+            try {
+                showStatus('🗑️ Limpiando asistencia...', 'success');
+                
+                const response = await fetch('/api/limpiar-asistencia', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        fecha: new Date().toISOString().split('T')[0]
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showStatus(`✅ Sistema limpiado completamente. Se eliminaron ${data.empleadosEliminados} empleados y ${data.asistenciasEliminadas} registros de asistencia. El sistema está listo para cargar una nueva lista.`, 'success');
+                } else {
+                    showStatus('❌ Error al limpiar el sistema: ' + data.error, 'error');
+                }
+            } catch (error) {
+                showStatus('❌ Error de conexión: ' + error.message, 'error');
+            }
+        }
+    </script>
+</body>
+</html>
+

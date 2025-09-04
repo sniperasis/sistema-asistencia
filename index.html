@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Asistencia</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        .button {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 10px;
+            background: #007cba;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,124,186,0.3);
+        }
+        .button:hover {
+            background: #005a87;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,124,186,0.4);
+        }
+        .button.mobile {
+            background: #28a745;
+            box-shadow: 0 4px 15px rgba(40,167,69,0.3);
+        }
+        .button.mobile:hover {
+            background: #1e7e34;
+            box-shadow: 0 6px 20px rgba(40,167,69,0.4);
+        }
+        .button.admin {
+            background: #6f42c1;
+            box-shadow: 0 4px 15px rgba(111,66,193,0.3);
+        }
+        .button.admin:hover {
+            background: #5a32a3;
+            box-shadow: 0 6px 20px rgba(111,66,193,0.4);
+        }
+        .icon {
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+        .note {
+            margin-top: 30px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .features {
+            margin: 30px 0;
+            text-align: left;
+        }
+        .feature {
+            margin: 10px 0;
+            color: #555;
+        }
+        .feature::before {
+            content: "✅ ";
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏢 Sistema de Asistencia</h1>
+        <p class="subtitle">Sistema completo para toma de asistencia con lectura QR de cédulas chilenas</p>
+        
+        <div class="features">
+            <div class="feature">Lectura QR automática de cédulas</div>
+            <div class="feature">Marcado manual de asistencia</div>
+            <div class="feature">Panel administrativo completo</div>
+            <div class="feature">Exportación a Excel</div>
+            <div class="feature">Interfaz responsive para móviles</div>
+        </div>
+        
+        <a href="app-movil-funcional.html" class="button mobile">
+            <span class="icon">📱</span>App Móvil
+        </a>
+        <br><br>
+        <a href="panel.html" class="button admin">
+            <span class="icon">📊</span>Panel Administrativo
+        </a>
+        
+        <div class="note">
+            <strong>Nota:</strong> Esta es la versión frontend del sistema. 
+            Para funcionalidad completa (APIs, base de datos), necesitas ejecutar el servidor backend localmente.
+        </div>
+    </div>
+</body>
+</html>
