@@ -12,6 +12,18 @@
       "dest": "/server.js"
     },
     {
+      "src": "/panel",
+      "dest": "/public/panel.html"
+    },
+    {
+      "src": "/app",
+      "dest": "/public/app-movil-funcional.html"
+    },
+    {
+      "src": "/admin",
+      "dest": "/public/panel.html"
+    },
+    {
       "src": "/(.*)",
       "dest": "/public/$1"
     }
