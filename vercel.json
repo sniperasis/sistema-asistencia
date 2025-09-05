@@ -4,28 +4,12 @@
     {
       "src": "server.js",
       "use": "@vercel/node"
-    },
-    {
-      "src": "web/dist/**",
-      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
       "dest": "/server.js"
-    },
-    {
-      "src": "/panel",
-      "dest": "/web/dist/index.html"
-    },
-    {
-      "src": "/web/(.*)",
-      "dest": "/web/dist/$1"
-    },
-    {
-      "src": "/assets/(.*)",
-      "dest": "/web/dist/assets/$1"
     },
     {
       "src": "/(.*)",
